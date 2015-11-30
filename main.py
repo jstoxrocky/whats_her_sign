@@ -1,7 +1,6 @@
 from flask import Flask, request, session, render_template, jsonify, redirect, url_for
 import requests
 import os
-import requests
 import json
 from datetime import datetime
 
