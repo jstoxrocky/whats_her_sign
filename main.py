@@ -44,7 +44,7 @@ zodiacs = [(120, 'Capricorn'), (218, 'Aquarius'), (320, 'Pisces'), (420, 'Aries'
 def get_zodiac_of_date(date):
     date_number = int("".join((str(date.date().month), '%02d' % date.date().day)))
     for z in zodiacs:
-        if date_number <= z[0]:
+        if date_number < z[0]:
             return z[1]
 
 
