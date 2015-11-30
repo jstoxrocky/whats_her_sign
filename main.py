@@ -184,7 +184,6 @@ def login():
             'signed_in': True}
 
     return redirect(url_for('index'))
-    # return render_template('/index.html', data=data)
 
 
 

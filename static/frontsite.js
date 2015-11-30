@@ -52,31 +52,3 @@ function get_info() {
         console.log("FAILURE");
     });
 };
-
-
-
-function login() {
-
-    // Get search string
-    fb_id = $("#fb_id_add").val();
-    fb_auth_token = $("#fb_auth_add").val();
-
-    // Switch the magnifying glass image to the loading spinner
-    $('#search_load').show();
-    $('#search_icon').hide();
-
-    // POST request to /get_hw
-    url = "/login";
-    $.post(url,{fb_id:fb_id,fb_auth_token:fb_auth_token}).done(function(response) {
-        
-        $('#search_load').hide();
-        $('#search_icon').show();
-        window.location.href = "/";
-
-
-    // If POST request fails
-    }).fail(function(error) {
-        $("#get_hw_response").text(error);
-        console.log("FAILURE");
-    });
-};

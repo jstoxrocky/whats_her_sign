@@ -22,7 +22,12 @@
                 {% if not data.signed_in %}
                 <li><a href="/go_to_login_page">Log In</a></li>
                 {% else %}
-                <li><a href="/logout">Log Out</a></li>
+                <li><a href="/">
+                  <span class="nav-line-1">Hello, {{data.fb_id}}</span>
+                  <span class="nav-line-1 nav-line-2">Enjoy :)</span>
+                </a></li>
+
+                <li><a href="logout">Log Out</a></li>
                 {% endif %}
               </ul>
 
