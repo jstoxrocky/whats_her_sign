@@ -1,0 +1,258 @@
+body {
+    margin:0px;
+    /*padding:0px;*/
+    width:100%;
+    font-family: Montserrat;
+    padding-top: 50px;
+}
+
+html{
+width: 100%;
+    margin:0px;
+    padding:0px;
+}
+/*
+.header_title {
+	font-family:Montserrat;
+}*/
+
+.dataframe {
+	border: 0;
+	width:100%;
+}
+
+.dataframe th {
+	font-size: 0.8em;
+}
+
+.path_purchases td {
+	font-size:0.8em;
+}
+
+.path_sales td {
+	font-size:0.8em;
+}
+
+.imageContainer {
+  	display: table; 
+	text-align:center;
+    width:100%; 
+    height:200px; 
+    padding-top:30px;
+}
+
+.navbar-header {
+    height:55px;
+}
+
+.collapse-navbar-collapse {
+    padding-top:1px;
+    font-size:15px;
+}
+
+#main_image {
+
+ 	background-image:url('https://images.unsplash.com/photo-1444573997188-93a7ea73940f?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&w=1080&fit=max&s=45c03a7a00c1eacfcbbf1602a9e8ba86&w=1300');
+
+ 	background-repeat: no-repeat;
+    position:relative;
+    padding-bottom:35px;
+ }
+/*
+ #get_hw_image {
+ 	
+ }*/
+
+.top_span {
+	display: inline-block; 
+	vertical-align: middle; 
+	height:400px
+}
+
+.bottom_span {
+	 
+	display: inline-block; 
+	vertical-align: middle; 
+}
+
+.top_text {
+	padding-top:1em;
+	font-size: 3em; 
+	color:white;
+}
+
+.bottom_text {
+    padding-top:0.5em;
+	font-size: 1.2em; 
+	color:black;
+}
+
+.confirm_button {
+	visibility:hidden;
+}
+
+.price {
+ 	width:5em;
+}
+
+.msg {
+	padding:5px;
+ 	border-radius: 5px;
+}
+
+#upload_results_msg {
+ 	color:white;
+}
+
+.nav-line-1 {
+	font-size: 12px;
+	line-height: 14px;
+	height: 14px;
+	float:left;
+    clear:both;
+}
+
+.nav-line-2 {
+	font-size: 14px;
+    line-height: 15px; 
+    font-weight: 700;
+}
+
+.well {
+	/*width:75%;*/
+	margin:25px;
+}
+
+
+.q {
+	font-size:16px;
+}
+
+
+input[type="text"]  {
+    height:34;
+    /*padding:2px;*/
+    border:1px solid #ddd;
+    opacity: 1;
+    /*size:25;*/
+}
+
+input  {
+	padding:0px;
+}
+
+/*#keyword_string_search {
+	width:500px;
+}*/
+
+
+
+
+#section_search {
+	display:none;
+}
+
+
+
+
+
+html,
+body {
+  height: 100%;
+  /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto;
+  /* Negative indent footer by its height */
+  margin: 0 auto -60px;
+  /* Pad bottom by footer height */
+  padding: 0 0 60px;
+}
+
+/* Set the fixed height of the footer here */
+#footer {
+  height: 60px;
+  background-color: #f5f5f5;
+}
+
+.footer_text { 
+    text-align:center;
+    padding-top:20px;
+}
+
+
+
+
+
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+
+
+#search_btn {
+  height:35px;
+  width:58px;
+}
+
+#search_btn {
+    border-radius: 0px 5px 5px 0px;
+    opacity: 1;
+    padding: 1px 12px 0px 12px;
+}
+#search_icon {
+  height:32px;
+  width:32px;
+}
+
+
+.confirm_button {
+  visibility:hidden;
+  margin-left:10px;
+}
+
+.price {
+  margin-left:10px;
+}
+
+
+
+
+
+#popup {
+  background-color: #ddd;
+  height:300px;
+  width:300px;
+  position:fixed;
+  top:200px;
+  left:25%;
+}
+
+
+.tinder_img {
+  width:192px;
+  height:192px;
+  padding:10px;
+   opacity: 0.7; 
+}
+
+
+
+.tinder_img:hover { 
+  opacity: 1; 
+}
+
+

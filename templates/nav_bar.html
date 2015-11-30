@@ -1,0 +1,36 @@
+
+        <div class="navbar navbar-inverse navbar-fixed-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <!-- <img style="width:50px;" src="../static/images/little birdy-logo-black-final-version.png"/> -->
+              <a class="navbar-brand header_title" style="font-family:Pacifico;font-size:30px;right:8px;" href="/index.html">What's Her Sign?</a>
+            </div>
+            <div class="collapse-navbar-collapse">
+              <ul class="nav navbar-nav">
+                <!-- <li><a href="/how_it_works">How It Works</a></li> -->
+                <!-- <li><a href="/faq">FAQ</a></li> -->
+                <!-- <li><a href="#section_my_purchases">My Purchases</a></li> -->
+                <!-- <li><a href="#section_my_for_sale">My Uploads</a></li> -->
+              </ul>
+
+              <ul class="nav navbar-nav navbar-right">
+                {% if not data.signed_in %}
+                <li><a href="/go_to_login_page">Log In</a></li>
+                {% else %}
+                <li><a href="/logout">Log Out</a></li>
+                {% endif %}
+              </ul>
+
+              </ul>
+
+
+
+              </ul>
+            </div><!--/.nav-collapse -->
+          </div>
+        </div>
