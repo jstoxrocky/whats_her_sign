@@ -37,6 +37,11 @@ headers = {
 }
 
 
+
+# https://www.facebook.com/dialog/oauth?client_id=464891386855067&redirect_uri=https://www.facebook.com/connect/login_success.html&scope=basic_info,email,public_profile,user_about_me,user_activities,user_birthday,user_education_history,user_friends,user_interests,user_likes,user_location,user_photos,user_relationship_details&response_type=token
+
+
+
 zodiacs = [(120, 'Capricorn'), (219, 'Aquarius'), (321, 'Pisces'), (420, 'Aries'), (521, 'Taurus'),
            (621, 'Gemini'), (723, 'Cancer'), (823, 'Leo'), (923, 'Virgo'), (1023, 'Libra'),
            (1122, 'Scorpio'), (1222, 'Sagitarius'), (1231, 'Capricorn')]
@@ -51,6 +56,8 @@ def get_zodiac_of_date(date):
 def auth_token(fb_auth_token, fb_user_id):
     h = headers
     h.update({'content-type': 'application/json'})
+
+    fb_user_id = 464891386855067
     req = requests.post(
         'https://api.gotinder.com/auth',
         headers=h,
