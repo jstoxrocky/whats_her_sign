@@ -106,8 +106,30 @@ def get_info():
 
 
 
+@app.route('/most_recent', methods=["POST"])
+def most_recent():
 
-def ago(raw):
+    if session.get('fb_id'):
+        data = {'fb_id': session['fb_id'],
+                'fb_auth_token': session['fb_auth_token'],
+                'signed_in': True}
+    else:
+        data = {'signed_in': False,}
+
+    fb_auth_token = data['fb_auth_token']
+    fb_id = data['fb_id']
+
+    search_name = request.form['search_name']
+    token = auth_token(fb_auth_token, fb_id)
+
+    ppl_list = ten_most_recent(token)
+    print len(ppl_list)
+
+    return jsonify({'ppl_list':ppl_list})
+
+
+
+def ago(raw, return_seconds=False):
     if raw:
         gmt = pytz.timezone('GMT')
         eastern = pytz.timezone('US/Eastern')
@@ -123,6 +145,9 @@ def ago(raw):
 
         secs_ago = int(now_dt_eastern.strftime("%s")) - int(dt_eastern.strftime("%s"))
 
+        if return_seconds:
+            return secs_ago
+
         if secs_ago > 86400:
             return u'{days} days ago'.format(days=secs_ago / 86400)
         elif secs_ago < 3600:
@@ -134,6 +159,56 @@ def ago(raw):
 
 
 
+def ten_most_recent(token):
+
+    ppl_list = []
+    for data in updates(token):
+        person = data['person']
+        if data.get('person'):
+            ping_str = person['ping_time']
+            last_active_at = ago(ping_str, return_seconds=True)
+            if last_active_at <= 5*60:
+                current_person = personal_info(person)
+                ppl_list.append(current_person)
+
+        if len(ppl_list) >= 10:
+            return ppl_list
+
+
+def personal_info(person):
+
+    name =  person['name']
+    bio = person['bio']
+    
+    bday_str = person['birth_date']
+    bday_dt = datetime.strptime(bday_str,"%Y-%m-%dT%H:%M:%S.%fZ")
+
+    ping_str = person['ping_time']
+    last_active_at = ago(ping_str)
+
+    age = -(bday_dt - datetime.now()).days/365
+    zodiac = get_zodiac_of_date(bday_dt)
+
+    img_list = []
+    large_img_list = []
+    for img in person['photos']:
+        url = img['processedFiles'][-2]['url']
+        large_url = img['processedFiles'][0]['url']
+        img_list.append(url)
+        large_img_list.append(large_url)
+        
+
+    current_person  = {'name':name, 
+                        'age':age,
+                        'sign':zodiac, 
+                        'bio':bio,
+                        'birthday':str(bday_dt.date()),
+                        'img':img_list,
+                        'large_img_list':large_img_list,
+                        'last_active_at':last_active_at}
+
+    return current_person
+
 def hit_tinder_api(token, search_name):
 
     ppl_list = []
@@ -142,35 +217,7 @@ def hit_tinder_api(token, search_name):
         if data.get('person') and search_name.lower() in data.get('person')['name'].lower():
 
             person = data['person']
-            name =  person['name']
-            bio = person['bio']
-            
-            bday_str = person['birth_date']
-            bday_dt = datetime.strptime(bday_str,"%Y-%m-%dT%H:%M:%S.%fZ")
-
-            ping_str = person['ping_time']
-            last_active_at = ago(ping_str)
-
-            age = -(bday_dt - datetime.now()).days/365
-            zodiac = get_zodiac_of_date(bday_dt)
-
-            img_list = []
-            large_img_list = []
-            for img in person['photos']:
-                url = img['processedFiles'][-2]['url']
-                large_url = img['processedFiles'][0]['url']
-                img_list.append(url)
-                large_img_list.append(large_url)
-                
-
-            current_person  = {'name':name, 
-                                'age':age,
-                                'sign':zodiac, 
-                                'bio':bio,
-                                'birthday':str(bday_dt.date()),
-                                'img':img_list,
-                                'large_img_list':large_img_list,
-                                'last_active_at':last_active_at}
+            current_person = personal_info(person)
 
             ppl_list.append(current_person)
 
