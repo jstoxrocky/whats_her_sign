@@ -3,6 +3,7 @@ import requests
 import os
 import json
 from datetime import datetime
+import pytz
 
 # Constants
 APP_SECRET = os.environ.get('tinder_app_secret')
@@ -108,8 +109,17 @@ def get_info():
 
 def ago(raw):
     if raw:
-        d = datetime.strptime(raw, '%Y-%m-%dT%H:%M:%S.%fZ')
-        secs_ago = int(datetime.now().strftime("%s")) - int(d.strftime("%s"))
+        gmt = pytz.timezone('GMT')
+        eastern = pytz.timezone('US/Eastern')
+
+        dt = datetime.strptime(raw, '%Y-%m-%dT%H:%M:%S.%fZ')
+        dt_gmt = gmt.localize(dt)
+        dt_eastern = dt_gmt.astimezone(eastern)
+
+        now_dt = datetime.now()
+
+        secs_ago = int(now_dt.strftime("%s")) - int(dt_eastern.strftime("%s"))
+
         if secs_ago > 86400:
             return u'{days} days ago'.format(days=secs_ago / 86400)
         elif secs_ago < 3600:

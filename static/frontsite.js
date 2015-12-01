@@ -2,6 +2,7 @@ function get_info() {
 
     // Get search string
     search_name = $("#search_name").val();
+    // console.log(search_name)
     $("#results_img").empty()
 
     // Switch the magnifying glass image to the loading spinner
@@ -18,6 +19,8 @@ function get_info() {
         ppl_list = response['ppl_list'];
 
 
+        // console.log(ppl_list)
+
         for (var person_num=0; person_num < ppl_list.length; person_num++) {
 
             name = ppl_list[person_num]['name']
@@ -28,17 +31,20 @@ function get_info() {
             img_list = ppl_list[person_num]['img']
             last_active_at = ppl_list[person_num]['last_active_at']
 
-            $("#results_img").append('<h1>'+name+' ('+age+')</h1>')
-            $("#results_img").append('<h3>'+sign+'</h3>')
-            $("#results_img").append('<p>Last active: '+last_active_at+'</p>')
-            $("#results_img").append('<p>'+bio+'</p>')
-            $("#results_img").append('<p>DOB: '+birthday+'</p>')
+           $("#results_img").append('<div id="'+person_num+'" class="well"></div>')
+
+
+            $("#"+person_num).append('<h1>'+name+' ('+age+')</h1>')
+            $("#"+person_num).append('<h3>'+sign+'</h3>')
+            $("#"+person_num).append('<p>Last active: '+last_active_at+'</p>')
+            $("#"+person_num).append('<p>'+bio+'</p>')
+            $("#"+person_num).append('<p>DOB: '+birthday+'</p>')
 
             for (var i =0; i < img_list.length; i++) {
 
                 img = '<a target="_blank" href="'+img_list[i]+'"><img class="tinder_img" src="'+img_list[i]+'"/></a>'
 
-                $("#results_img").append(img)
+                $("#"+person_num).append(img)
             }
 
         }
