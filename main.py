@@ -144,8 +144,8 @@ def ten_most_recent(token, minutes):
 
     ppl_list = []
     for data in updates(token):
-        person = data['person']
         if data.get('person'):
+            person = data['person']
             ping_str = person['ping_time']
             last_active_at = ago(ping_str, return_seconds=True)
             if last_active_at <= minutes*60:
