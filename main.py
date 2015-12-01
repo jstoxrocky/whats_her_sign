@@ -101,9 +101,10 @@ def get_info():
 
     try:
         search_name = int(search_name)
-        ppl_list = ten_most_recent(token, search_name)
+        func = ten_most_recent
     except:
-        ppl_list = hit_tinder_api(token, search_name)
+        func = hit_tinder_api
+    func(token, search_name)
         
     return jsonify({'ppl_list':ppl_list})
 
@@ -122,7 +123,6 @@ def ago(raw, return_seconds=False):
         now_dt = datetime.now()
         now_dt_gmt = gmt.localize(now_dt)
         now_dt_eastern = now_dt_gmt.astimezone(eastern)
-
 
         secs_ago = int(now_dt_eastern.strftime("%s")) - int(dt_eastern.strftime("%s"))
 

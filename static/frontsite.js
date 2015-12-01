@@ -28,36 +28,6 @@ function get_info() {
 
 
 
-function most_recent() {
-
-    // Get search string
-    search_name = $("#search_name").val();
-    // console.log(search_name)
-    $("#results_img").empty()
-
-    // Switch the magnifying glass image to the loading spinner
-    $('#search_load').show();
-    $('#search_icon').hide();
-
-    // POST request to /get_hw
-    url = "/most_recent";
-    $.post(url,{search_name:search_name}).done(function(response) {
-        
-        $('#search_load').hide();
-        $('#search_icon').show();
-
-        ppl_list = response['ppl_list'];
-        display_ppl(ppl_list)
-
-    // If POST request fails
-    }).fail(function(error) {
-        $("#get_hw_response").text(error);
-        console.log("FAILURE");
-    });
-};
-
-
-
 function display_ppl(ppl_list) {
 
         for (var person_num=0; person_num < ppl_list.length; person_num++) {
