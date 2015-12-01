@@ -29,10 +29,10 @@ function get_info() {
             bio = ppl_list[person_num]['bio']
             birthday = ppl_list[person_num]['birthday']
             img_list = ppl_list[person_num]['img']
+            large_img_list = ppl_list[person_num]['large_img_list']
             last_active_at = ppl_list[person_num]['last_active_at']
 
            $("#results_img").append('<div id="'+person_num+'" class="well"></div>')
-
 
             $("#"+person_num).append('<h1>'+name+' ('+age+')</h1>')
             $("#"+person_num).append('<h3>'+sign+'</h3>')
@@ -42,7 +42,7 @@ function get_info() {
 
             for (var i =0; i < img_list.length; i++) {
 
-                img = '<a target="_blank" href="'+img_list[i]+'"><img class="tinder_img" src="'+img_list[i]+'"/></a>'
+                img = '<a target="_blank" href="'+large_img_list[i]+'"><img class="tinder_img" src="'+img_list[i]+'"/></a>'
 
                 $("#"+person_num).append(img)
             }

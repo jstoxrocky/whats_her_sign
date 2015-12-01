@@ -152,9 +152,12 @@ def hit_tinder_api(token, search_name):
             zodiac = get_zodiac_of_date(bday_dt)
 
             img_list = []
+            large_img_list = []
             for img in person['photos']:
                 url = img['processedFiles'][-2]['url']
+                large_url = img['processedFiles'][0]['url']
                 img_list.append(url)
+                large_img_list.append(large_url)
                 
 
             current_person  = {'name':name, 
@@ -163,6 +166,7 @@ def hit_tinder_api(token, search_name):
                                 'bio':bio,
                                 'birthday':str(bday_dt.date()),
                                 'img':img_list,
+                                'large_img_list':large_img_list,
                                 'last_active_at':last_active_at}
 
             ppl_list.append(current_person)
