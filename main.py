@@ -22,9 +22,8 @@ Function called when homepage requested
 def index():
 
     # Get log in info if user logged into Venmo
-    if session.get('fb_id'):
-        data = {'fb_id': session['fb_id'],
-                'fb_auth_token': session['fb_auth_token'],
+    if session.get('fb_auth_token'):
+        data = {'fb_auth_token': session['fb_auth_token'],
                 'signed_in': True}
         return render_template('index.html', data=data)
     else:
@@ -86,15 +85,14 @@ def updates(auth_token):
 @app.route('/get_info', methods=["POST"])
 def get_info():
 
-    if session.get('fb_id'):
-        data = {'fb_id': session['fb_id'],
-                'fb_auth_token': session['fb_auth_token'],
+    if session.get('fb_auth_token'):
+        data = {'fb_auth_token': session['fb_auth_token'],
                 'signed_in': True}
     else:
         data = {'signed_in': False,}
 
     fb_auth_token = data['fb_auth_token']
-    fb_id = data['fb_id']
+    fb_id = 464891386855067#data['fb_id']
 
     search_name = request.form['search_name']
     token = auth_token(fb_auth_token, fb_id)
@@ -208,9 +206,8 @@ def hit_tinder_api(token, search_name):
 @app.route('/go_to_login_page')
 def go_to_login_page():
 
-    if session.get('fb_id'):
-        data = {'fb_id': session['fb_id'],
-                'fb_auth_token': session['fb_auth_token'],
+    if session.get('fb_auth_token'):
+        data = {'fb_auth_token': session['fb_auth_token'],
                 'signed_in': True}
         return render_template('index.html', data=data)
     else:
@@ -225,14 +222,13 @@ Function called after authentication
 @app.route('/login', methods=["POST"])
 def login():
 
-    fb_id = request.form['fb_id']
+    # fb_id = request.form['fb_id']
     fb_auth_token = request.form['fb_auth_token']
 
-    session['fb_id'] = fb_id
+    # session['fb_id'] = fb_id
     session['fb_auth_token'] = fb_auth_token
 
-    data = {'fb_id': session['fb_id'],
-            'fb_auth_token': session['fb_auth_token'],
+    data = {'fb_auth_token': session['fb_auth_token'],
             'signed_in': True}
 
     return redirect(url_for('index'))
