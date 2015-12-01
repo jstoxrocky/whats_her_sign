@@ -117,8 +117,11 @@ def ago(raw):
         dt_eastern = dt_gmt.astimezone(eastern)
 
         now_dt = datetime.now()
+        now_dt_gmt = gmt.localize(now_dt)
+        now_dt_eastern = now_dt_gmt.astimezone(eastern)
 
-        secs_ago = int(now_dt.strftime("%s")) - int(dt_eastern.strftime("%s"))
+
+        secs_ago = int(now_dt_eastern.strftime("%s")) - int(dt_eastern.strftime("%s"))
 
         if secs_ago > 86400:
             return u'{days} days ago'.format(days=secs_ago / 86400)
