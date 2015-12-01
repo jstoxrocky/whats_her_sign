@@ -104,7 +104,7 @@ def get_info():
         func = ten_most_recent
     except:
         func = hit_tinder_api
-    func(token, search_name)
+    ppl_list = func(token, search_name)
         
     return jsonify({'ppl_list':ppl_list})
 
