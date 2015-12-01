@@ -99,33 +99,14 @@ def get_info():
     search_name = request.form['search_name']
     token = auth_token(fb_auth_token, fb_id)
 
-    
-    ppl_list = hit_tinder_api(token, search_name)
+    try:
+        search_name = int(search_name)
+        ppl_list = ten_most_recent(token, search_name)
+    except:
+        ppl_list = hit_tinder_api(token, search_name)
         
     return jsonify({'ppl_list':ppl_list})
 
-
-
-@app.route('/most_recent', methods=["POST"])
-def most_recent():
-
-    if session.get('fb_id'):
-        data = {'fb_id': session['fb_id'],
-                'fb_auth_token': session['fb_auth_token'],
-                'signed_in': True}
-    else:
-        data = {'signed_in': False,}
-
-    fb_auth_token = data['fb_auth_token']
-    fb_id = data['fb_id']
-
-    search_name = request.form['search_name']
-    token = auth_token(fb_auth_token, fb_id)
-
-    ppl_list = ten_most_recent(token)
-    print len(ppl_list)
-
-    return jsonify({'ppl_list':ppl_list})
 
 
 
@@ -159,7 +140,7 @@ def ago(raw, return_seconds=False):
 
 
 
-def ten_most_recent(token):
+def ten_most_recent(token, minutes):
 
     ppl_list = []
     for data in updates(token):
@@ -167,7 +148,7 @@ def ten_most_recent(token):
         if data.get('person'):
             ping_str = person['ping_time']
             last_active_at = ago(ping_str, return_seconds=True)
-            if last_active_at <= 5*60:
+            if last_active_at <= minutes*60:
                 current_person = personal_info(person)
                 ppl_list.append(current_person)
 
