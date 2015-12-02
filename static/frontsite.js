@@ -1,34 +1,4 @@
-function get_info() {
-
-    // Get search string
-    search_name = $("#search_name").val();
-    // console.log(search_name)
-    $("#results_img").empty()
-
-    // Switch the magnifying glass image to the loading spinner
-    $('#search_load').show();
-    $('#search_icon').hide();
-
-    // POST request to /get_hw
-    url = "/get_info";
-    $.post(url,{search_name:search_name}).done(function(response) {
-        
-        $('#search_load').hide();
-        $('#search_icon').show();
-
-        ppl_list = response['ppl_list'];
-        display_ppl(ppl_list)
-
-    // If POST request fails
-    }).fail(function(error) {
-        $("#get_hw_response").text(error);
-        console.log("FAILURE");
-    });
-};
-
-
-
-function display_ppl(ppl_list) {
+function display_ppl(ppl_list, loc_id) {
 
         for (var person_num=0; person_num < ppl_list.length; person_num++) {
 
@@ -41,7 +11,7 @@ function display_ppl(ppl_list) {
             large_img_list = ppl_list[person_num]['large_img_list']
             last_active_at = ppl_list[person_num]['last_active_at']
 
-           $("#results_img").append('<div id="'+person_num+'" class="well"></div>')
+           $("#" + loc_id).append('<div id="'+person_num+'" class="well"></div>')
 
             $("#"+person_num).append('<h1>'+name+' ('+age+')</h1>')
             $("#"+person_num).append('<h3>'+sign+'</h3>')
@@ -59,5 +29,94 @@ function display_ppl(ppl_list) {
         }
 
 }
+
+
+function get_info() {
+
+    // Get search string
+    search_name = $("#search_name").val();
+    // console.log(search_name)
+    loc_id = 'results_img'
+    $("#"+loc_id).empty()
+
+    // Switch the magnifying glass image to the loading spinner
+    $('#search_load').show();
+    $('#search_icon').hide();
+
+    // POST request to /get_hw
+    url = "/get_info";
+    $.post(url,{search_name:search_name}).done(function(response) {
+        
+        $('#search_load').hide();
+        $('#search_icon').show();
+
+        signed_in = response['signed_in'];
+
+        if (signed_in){
+            ppl_list = response['ppl_list'];
+            display_ppl(ppl_list, loc_id)
+        }
+        else {
+            alert('You must sign in.')
+        }
+
+    // If POST request fails
+    }).fail(function(error) {
+        $("#get_hw_response").text(error);
+        console.log("FAILURE");
+    });
+};
+
+
+function self_info() {
+
+    loc_id = 'self_info'
+    $("#"+loc_id).empty()
+
+    // POST request to /get_hw
+    url = "/get_self_info";
+    $.post(url).done(function(response) {
+
+        me_list = response['me_list'];
+        display_ppl(me_list, loc_id)
+
+    // If POST request fails
+    }).fail(function(error) {
+        $("#get_hw_response").text(error);
+        console.log("FAILURE");
+    });
+
+
+};
+
+
+function self_matches_over_time() {
+
+    $('#matches_load').show();
+
+    url = "/get_matches_over_time";
+    $.get(url).done(function(response) {
+
+        $('#matches_load').hide();
+
+
+
+        x = response['x'];
+        y = response['y'];
+
+        ch = new chart("#ch1");
+        ch.line(x, y, 'Matches');
+        ch.set_title('Match Volume')
+        ch.set_subtitle('Count of Tinder matches per day')
+        ch.set_ylabel('Count')
+
+
+    // If POST request fails
+    }).fail(function(error) {
+        $("#get_hw_response").text(error);
+        console.log("FAILURE");
+    });
+
+};
 
 

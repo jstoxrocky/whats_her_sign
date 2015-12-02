@@ -1,0 +1,26 @@
+<script>
+	$(document).ready(function(){
+
+		$('#matches_load').hide();
+		self_info()
+		
+	});
+</script>
+
+<section>
+    <div id="self_info" class="container" style="width:80%">
+    </div>
+
+
+    <div id="self_matches_over_time" class="container" style="width:80%">
+    	<div class="well">
+
+    	<button class="btn btn-primary" type="button" onClick="javascript:self_matches_over_time();">Match Volume <span id="matches_load" class="spinner glyphicon glyphicon-refresh glyphicon-refresh-animate"></span></button>
+
+    	<div class="d3sg_chart" id="ch1"></div>
+
+    	</div>
+    </div>
+
+</section>
+

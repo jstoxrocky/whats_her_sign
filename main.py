@@ -2,8 +2,9 @@ from flask import Flask, request, session, render_template, jsonify, redirect, u
 import requests
 import os
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
+from pandas import DataFrame
 
 # Constants
 APP_SECRET = os.environ.get('tinder_app_secret')
@@ -21,10 +22,12 @@ Function called when homepage requested
 @app.route('/index.html')
 def index():
 
+
     # Get log in info if user logged into Venmo
     if session.get('fb_auth_token'):
         data = {'fb_auth_token': session['fb_auth_token'],
-                'signed_in': True}
+            'name':session['name'],
+            'signed_in': True}
         return render_template('index.html', data=data)
     else:
         data = {'signed_in': False,}
@@ -35,11 +38,6 @@ headers = {
     'app_version': '3',
     'platform': 'ios',
 }
-
-
-
-# https://www.facebook.com/dialog/oauth?client_id=464891386855067&redirect_uri=https://www.facebook.com/connect/login_success.html&scope=basic_info,email,public_profile,user_about_me,user_activities,user_birthday,user_education_history,user_friends,user_interests,user_likes,user_location,user_photos,user_relationship_details&response_type=token
-
 
 
 zodiacs = [(120, 'Capricorn'), (219, 'Aquarius'), (321, 'Pisces'), (420, 'Aries'), (521, 'Taurus'),
@@ -53,7 +51,7 @@ def get_zodiac_of_date(date):
             return z[1]
 
 
-def auth_token(fb_auth_token, fb_user_id):
+def auth_token(fb_auth_token):
     h = headers
     h.update({'content-type': 'application/json'})
 
@@ -64,7 +62,7 @@ def auth_token(fb_auth_token, fb_user_id):
         data=json.dumps({'facebook_token': fb_auth_token, 'facebook_id': fb_user_id})
     )
     try:
-        return req.json()['token']
+        return req.json()
     except:
         return None
 
@@ -90,22 +88,28 @@ def get_info():
                 'signed_in': True}
     else:
         data = {'signed_in': False,}
+        return jsonify(data)
 
     fb_auth_token = data['fb_auth_token']
-    fb_id = 464891386855067#data['fb_id']
 
     search_name = request.form['search_name']
-    token = auth_token(fb_auth_token, fb_id)
+    
 
     try:
         search_name = int(search_name)
         func = ten_most_recent
     except:
         func = hit_tinder_api
-    ppl_list = func(token, search_name)
+    ppl_list = func(fb_auth_token, search_name)
         
-    return jsonify({'ppl_list':ppl_list})
+    return jsonify({'ppl_list':ppl_list, 'signed_in':data['signed_in']})
 
+
+
+@app.route('/get_self_info', methods=["POST"])
+def get_self_info():
+
+    return jsonify({'me_list':[session['me']]})
 
 
 
@@ -224,12 +228,15 @@ def login():
 
     # fb_id = request.form['fb_id']
     fb_auth_token = request.form['fb_auth_token']
+    data = auth_token(fb_auth_token)
+    me = data['user']
+    me_dict = personal_info(me)
 
-    # session['fb_id'] = fb_id
-    session['fb_auth_token'] = fb_auth_token
+    session['id'] = me['_id']
+    session['name'] = me['full_name'].split(None)[0]
+    session['me'] = me_dict
 
-    data = {'fb_auth_token': session['fb_auth_token'],
-            'signed_in': True}
+    session['fb_auth_token'] = data['token']
 
     return redirect(url_for('index'))
 
@@ -242,6 +249,54 @@ Logout function
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
+
+
+
+
+
+"""
+See my account
+"""
+@app.route('/account')
+def my_account():
+
+    # See who is logged in
+    data = {'fb_auth_token': session['fb_auth_token'],
+            'name':session['name'],
+            'signed_in': True}
+
+
+    return render_template('/account.html', data=data)
+
+
+
+
+"""
+See my account
+"""
+@app.route('/get_matches_over_time')
+def get_matches_over_time():
+ 
+    match_dt_arr = []
+    for data in updates(session['fb_auth_token']):
+        if data.get('person'):
+            match_dt_str = data['created_date']
+            match_dt = datetime.strptime(match_dt_str,"%Y-%m-%dT%H:%M:%S.%fZ").date()
+            match_dt_arr.append(match_dt)
+
+    match_df = DataFrame({'match_dt':match_dt_arr})
+    match_df['c'] = 1
+    match_gb = match_df.groupby('match_dt').agg(len)
+    match_gb = match_gb.sort_index(ascending=True)
+    num_days = (match_gb.index.max() - match_gb.index.min()).days
+    match_gb = match_gb.reindex([match_gb.index.min() + timedelta(days=i) for i in range(num_days)]).fillna(0)
+
+    x = [str(dt) for dt in match_gb.index.tolist()]
+
+    return jsonify({'x':x, 'y':match_gb['c'].tolist()})
+
+
 
 
 if __name__ == '__main__':
