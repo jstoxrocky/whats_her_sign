@@ -12,18 +12,9 @@ function display_ppl(ppl_list, loc_id) {
             last_active_at = ppl_list[person_num]['last_active_at']
 
 
-            // div_for_this_person = $("#" + loc_id).append("div")
-            // div_for_this_person.attr("class","well")
-            // div_for_this_person.append("h1").html(name + '(' + age + ')')
-            // div_for_this_person.append("h3").html(sign)
-            // div_for_this_person.append("p").html('Last active: '+last_active_at)
-            // div_for_this_person.append("p").html(bio)
-            // div_for_this_person.append("p").html('DOB: '+birthday)
 
 
-
-           $("#" + loc_id).append('<div id="'+person_num+'" class="well"></div>')
-
+            $("#" + loc_id).append('<div id="'+person_num+'" class="well"></div>')
             $("#"+person_num).append('<h1>'+name+' ('+age+')</h1>')
             $("#"+person_num).append('<h3>'+sign+'</h3>')
             $("#"+person_num).append('<p>Last active: '+last_active_at+'</p>')
@@ -31,17 +22,11 @@ function display_ppl(ppl_list, loc_id) {
             $("#"+person_num).append('<p>DOB: '+birthday+'</p>')
 
 
-
-//             var div = document.createElement("div");
-// div.innerHTML = "Hello, world!";
-// document.body.appendChild(div);
-
             for (var i =0; i < img_list.length; i++) {
 
                 img = '<a target="_blank" href="'+large_img_list[i]+'"><img class="tinder_img" src="'+img_list[i]+'"/></a>'
 
                 $("#"+person_num).append(img)
-                // div_for_this_person.append(img)
             }
 
         }
@@ -117,16 +102,14 @@ function self_matches_over_time() {
 
         $('#matches_load').hide();
 
-
-
         x = response['x'];
         y = response['y'];
 
-        ch = new chart("#ch1");
+        ch = new chart("#ch_match_volume");
         ch.line(x, y, 'Matches');
         ch.set_title('Match Volume')
-        ch.set_subtitle('Count of Tinder matches per day')
-        ch.set_ylabel('Count')
+        ch.set_subtitle('Number of Tinder matches by day')
+        ch.set_ylabel('')
 
 
     // If POST request fails
@@ -138,3 +121,33 @@ function self_matches_over_time() {
 };
 
 
+
+
+function self_msg_over_time() {
+
+    $('#msg_load').show();
+
+    url = "/get_msg_over_time";
+    $.get(url).done(function(response) {
+
+        $('#msg_load').hide();
+
+        x = response['x'];
+        sent = response['sent'];
+        recieved = response['recieved'];
+
+        ch = new chart("#ch_msg_volume");
+        ch.line(x, sent, 'Sent');
+        ch.line(x, recieved, 'Recieved');
+        ch.set_title('Message Volume')
+        ch.set_subtitle('Number of messages sent/recieved by day')
+        ch.set_ylabel('')
+
+
+    // If POST request fails
+    }).fail(function(error) {
+        $("#get_hw_response").text(error);
+        console.log("FAILURE");
+    });
+
+};

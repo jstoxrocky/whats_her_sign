@@ -4,7 +4,7 @@ import os
 import json
 from datetime import datetime, timedelta
 import pytz
-from pandas import DataFrame
+from pandas import DataFrame, rolling_mean
 
 # Constants
 APP_SECRET = os.environ.get('tinder_app_secret')
@@ -74,7 +74,7 @@ def updates(auth_token):
     r = requests.post('https://api.gotinder.com/updates', headers=h, data=json.dumps({"last_activity_date":"2012-01-01T03:48:29.002Z"}))
     
     if r.status_code == 401 or r.status_code == 504:
-        raise Exception('Invalid code')
+        raise Exception('Invalid token. Try getting a fresh one.')
         print r.content
 
     for result in r.json()['matches']:
@@ -103,7 +103,7 @@ def get_info():
         func = hit_tinder_api
     ppl_list = func(fb_auth_token, search_name)
         
-    return jsonify({'ppl_list':ppl_list, 'signed_in':data['signed_in']})
+    return jsonify({'ppl_list':ppl_list[::-1], 'signed_in':data['signed_in']})
 
 
 
@@ -286,16 +286,49 @@ def get_matches_over_time():
             match_dt = datetime.strptime(match_dt_str,"%Y-%m-%dT%H:%M:%S.%fZ").date()
             match_dt_arr.append(match_dt)
 
-    match_df = DataFrame({'match_dt':match_dt_arr})
-    match_df['c'] = 1
-    match_gb = match_df.groupby('match_dt').agg(len)
-    match_gb = match_gb.sort_index(ascending=True)
-    num_days = (match_gb.index.max() - match_gb.index.min()).days
-    match_gb = match_gb.reindex([match_gb.index.min() + timedelta(days=i) for i in range(num_days)]).fillna(0)
+    x, y = dt_to_count_by_dt(match_dt_arr, periods_to_roll=7)    
 
-    x = [str(dt) for dt in match_gb.index.tolist()]
+    return jsonify({'x':x, 'y':y})
 
-    return jsonify({'x':x, 'y':match_gb['c'].tolist()})
+
+"""
+See my account
+"""
+@app.route('/get_msg_over_time')
+def get_msg_over_time():
+
+    sent_msg = []
+    recieved_msg = []
+    for data in updates(session['fb_auth_token']):
+        for msg in data['messages']:
+            
+            msg_dt = datetime.strptime(msg['sent_date'],"%Y-%m-%dT%H:%M:%S.%fZ").date()
+            if msg['from'] == session['id']:
+                sent_msg.append(msg_dt)
+            else:
+                recieved_msg.append(msg_dt)
+
+    x, sent = dt_to_count_by_dt(sent_msg, periods_to_roll=7) 
+    x, recieved = dt_to_count_by_dt(recieved_msg, periods_to_roll=7) 
+    return jsonify({'x':x, 'sent':sent, 'recieved':recieved})
+
+
+
+def dt_to_count_by_dt(arr, periods_to_roll=7):
+
+    df = DataFrame({'arr_name':arr})
+    df['c'] = 1
+    gb = df.groupby('arr_name').agg(len)
+    gb = gb.sort_index(ascending=True)
+    num_days = (gb.index.max() - gb.index.min()).days
+    gb = gb.reindex([gb.index.min() + timedelta(days=i) for i in range(num_days)]).fillna(0)
+
+    x = [str(dt) for dt in gb.index.tolist()]
+    y = rolling_mean(gb.c,periods_to_roll,min_periods=0).dropna().tolist()
+
+    return x, y
+
+
 
 
 
