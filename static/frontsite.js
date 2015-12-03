@@ -11,6 +11,17 @@ function display_ppl(ppl_list, loc_id) {
             large_img_list = ppl_list[person_num]['large_img_list']
             last_active_at = ppl_list[person_num]['last_active_at']
 
+
+            // div_for_this_person = $("#" + loc_id).append("div")
+            // div_for_this_person.attr("class","well")
+            // div_for_this_person.append("h1").html(name + '(' + age + ')')
+            // div_for_this_person.append("h3").html(sign)
+            // div_for_this_person.append("p").html('Last active: '+last_active_at)
+            // div_for_this_person.append("p").html(bio)
+            // div_for_this_person.append("p").html('DOB: '+birthday)
+
+
+
            $("#" + loc_id).append('<div id="'+person_num+'" class="well"></div>')
 
             $("#"+person_num).append('<h1>'+name+' ('+age+')</h1>')
@@ -19,11 +30,18 @@ function display_ppl(ppl_list, loc_id) {
             $("#"+person_num).append('<p>'+bio+'</p>')
             $("#"+person_num).append('<p>DOB: '+birthday+'</p>')
 
+
+
+//             var div = document.createElement("div");
+// div.innerHTML = "Hello, world!";
+// document.body.appendChild(div);
+
             for (var i =0; i < img_list.length; i++) {
 
                 img = '<a target="_blank" href="'+large_img_list[i]+'"><img class="tinder_img" src="'+img_list[i]+'"/></a>'
 
                 $("#"+person_num).append(img)
+                // div_for_this_person.append(img)
             }
 
         }

@@ -24,7 +24,8 @@ def index():
 
 
     # Get log in info if user logged into Venmo
-    if session.get('fb_auth_token'):
+    if session.get('name'):
+
         data = {'fb_auth_token': session['fb_auth_token'],
             'name':session['name'],
             'signed_in': True}
