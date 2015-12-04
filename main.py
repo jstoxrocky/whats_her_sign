@@ -113,6 +113,9 @@ Get info by main search
 def get_info():
 
     signed_in = True if session.get('name') else False
+    if not signed_in:
+        return jsonify({'signed_in':signed_in})
+
     fb_auth_token = session['fb_auth_token']
     search_name = request.form['search_name']
     ppl_list, new = query_updates(fb_auth_token, search_name)
@@ -150,8 +153,12 @@ Get recomendations
 """
 @app.route('/get_explore_info', methods=["POST"])
 def get_explore_info():
+
+    signed_in = True if session.get('name') else False
+    if not signed_in:
+        return jsonify({'signed_in':signed_in})
     ppl_list = get_next_recommendation(session['fb_auth_token'])
-    return jsonify({'ppl_list':ppl_list})
+    return jsonify({'ppl_list':ppl_list, 'signed_in':signed_in})
 
 """
 Like

@@ -239,8 +239,17 @@ function explore_info() {
         $('#flame_load').hide();
         $('#flame').show();
 
-        ppl_list = response['ppl_list'];
-        display_ppl(ppl_list, loc_id, true)
+        signed_in = response['signed_in'];
+
+        if (signed_in){
+            ppl_list = response['ppl_list'];
+            display_ppl(ppl_list, loc_id, true)
+        }
+        else {
+            alert('You must sign in.')
+        }
+
+        
 
     // If POST request fails
     }).fail(function(error) {
