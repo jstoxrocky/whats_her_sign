@@ -57,20 +57,20 @@ def search_by_user_id(auth_token, _id):
     return r.json()['results']
 
 
-"""
-Superlike by ID
-"""
-def superlike(_id):
+# """
+# Superlike by ID
+# """
+# def superlike(_id):
 
-    try:
-        u = 'https://api.gotinder.com/like/%s/super' % _id
-        d = requests.post(u, headers=headers, timeout=10.0)
-        d.text
-    except KeyError:
-        pass
-    else:
-        print d.json()
-        return d.json()
+#     try:
+#         u = 'https://api.gotinder.com/like/%s/super' % _id
+#         d = requests.post(u, headers=headers, timeout=10.0)
+#         d.text
+#     except KeyError:
+#         pass
+#     else:
+#         print d.json()
+#         return d.json()
 
 
 """
@@ -78,9 +78,39 @@ Like by ID
 """
 def like_by_id(_id):
 
-    print _id
-
     url = 'https://api.gotinder.com/like/%s' % _id
+    response = requests.get(url, headers=HEADERS, timeout=10.0)
+
+    print response.status_code
+    if response.status_code != 200:
+        raise Exception('Some kind of error')
+        print r.content
+
+    return response.json()#['result']
+
+
+"""
+Superlike by ID
+"""
+def superlike_by_id(_id):
+
+    url = 'https://api.gotinder.com/like/%s/super' % _id
+    response = requests.get(url, headers=HEADERS, timeout=10.0)
+
+    print response.status_code
+    if response.status_code != 200:
+        raise Exception('Some kind of error')
+        print r.content
+
+    return response.json()#['result']
+
+
+"""
+Pass by ID
+"""
+def pass_by_id(_id):
+
+    url = 'https://api.gotinder.com/pass/%s' % _id
     response = requests.get(url, headers=HEADERS, timeout=10.0)
 
     print response.status_code

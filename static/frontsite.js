@@ -1,4 +1,4 @@
-function display_ppl(ppl_list, loc_id, is_new) {
+function display_ppl(ppl_list, loc_id, is_new, is_exploring) {
 
         for (var person_num=0; person_num < ppl_list.length; person_num++) {
 
@@ -39,15 +39,19 @@ function display_ppl(ppl_list, loc_id, is_new) {
                 $(function() {
                     $('.like').click(function(e) {
                         url = "/like";
+
                         $.post(url,{_id:_id}).done(function(response) {
                             
-                           likes_remaining = response['likes_remaining']
-                           match = response['match']
-                           if (match) {
-                                alert("Yeah! You matched with " + name)
-                           }
-                           explore_info()
+                            console.log(response)
+                            likes_remaining = response['likes_remaining']
+                            self_main_pic = response['self_main_pic']
+                            match = response['match']
 
+                            display_modal(is_new, is_exploring, match, self_main_pic, img_list[0], name)
+
+                            if (is_exploring) {
+                                explore_info()
+                            }
 
                         // If POST request fails
                         }).fail(function(error) {
@@ -55,9 +59,83 @@ function display_ppl(ppl_list, loc_id, is_new) {
                         });
                     });
                 });
+
+                $(function() {
+                    $('.superlike').click(function(e) {
+                        url = "/superlike";
+                        $.post(url,{_id:_id}).done(function(response) {
+                            
+                            console.log(response)
+                            likes_remaining = response['likes_remaining']
+                            self_main_pic = response['self_main_pic']
+                            match = response['match']
+
+                            display_modal(is_new, is_exploring, match, self_main_pic, img_list[0], name)
+
+                            if (is_exploring) {
+                                explore_info()
+                            }
+
+                        // If POST request fails
+                        }).fail(function(error) {
+                            console.log(error);
+                        });
+                    });
+                });
+
+                $(function() {
+                    $('.pass').click(function(e) {
+                        url = "/_pass";
+                        $.post(url,{_id:_id}).done(function(response) {
+                            
+                            console.log(response)
+
+                            if (is_exploring) {
+                                explore_info()
+                            }
+
+                        // If POST request fails
+                        }).fail(function(error) {
+                            console.log(error);
+                        });
+                    });
+                });
+
+
+
+
+
+
             }
         }
 }
+
+
+
+function display_modal(is_new, is_exploring, match, self_pic, other_pic, name) {
+
+        //then its a targeted like
+       if (is_new && !is_exploring) {
+            $('#myModal').modal({ show: true})
+            $('.modal-title').html("You sent a targeted like!")
+            $('.modal-body').empty()
+            $('.modal-body').append('<img class="tinder_img" src="'+self_pic+'"/><img class="tinder_img" src="'+other_pic+'"/>')
+            $('.modal-footer').find('p').html("You sent " + name + " a targeted like.")
+       }
+
+       if (match) {
+            $('#myModal').modal({ show: true})
+            $('.modal-title').html("It's a Match!")
+            $('.modal-body').empty()
+            $('.modal-body').append('<img class="tinder_img" src="'+self_pic+'"/><img class="tinder_img" src="'+other_pic+'"/>')
+            $('.modal-footer').find('p').html("You and " + name + " have liked eachother.")
+       }
+}
+
+
+
+
+
 
 
 function get_info() {
@@ -84,8 +162,8 @@ function get_info() {
         if (signed_in){
             ppl_list = response['ppl_list'];
             is_new = response['new'];
-            console.log(is_new)
-            display_ppl(ppl_list, loc_id, is_new)
+            is_exploring = false
+            display_ppl(ppl_list, loc_id, is_new, is_exploring)
         }
         else {
             alert('You must sign in.')
@@ -109,7 +187,9 @@ function self_info() {
     $.post(url).done(function(response) {
 
         me_list = response['me_list'];
-        display_ppl(me_list, loc_id, false)
+        is_new = false
+        is_exploring = false
+        display_ppl(me_list, loc_id, is_new, is_exploring)
 
     // If POST request fails
     }).fail(function(error) {
@@ -182,46 +262,6 @@ function self_msg_over_time() {
 
 
 
-function superlike(btn) {
-
-    _id = btn.val()
-
-    // Switch the magnifying glass image to the loading spinner
-    // $('#search_load').show();
-
-    // POST request to /get_hw
-    url = "/superlike";
-    $.post(url,{_id:_id}).done(function(response) {
-        
-       console.log(response)
-
-    // If POST request fails
-    }).fail(function(error) {
-        console.log(error);
-    });
-};
-
-
-
-function like(btn) {
-
-    _id = btn.val()
-
-    // Switch the magnifying glass image to the loading spinner
-    // $('#search_load').show();
-
-    // POST request to /get_hw
-    url = "/like";
-    $.post(url,{_id:_id}).done(function(response) {
-        
-       console.log(response)
-
-    // If POST request fails
-    }).fail(function(error) {
-        console.log(error);
-    });
-};
-
 
 
 function explore_info() {
@@ -243,7 +283,9 @@ function explore_info() {
 
         if (signed_in){
             ppl_list = response['ppl_list'];
-            display_ppl(ppl_list, loc_id, true)
+            is_new = true
+            is_exploring = true
+            display_ppl(ppl_list, loc_id, is_new, is_exploring)
         }
         else {
             alert('You must sign in.')

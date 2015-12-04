@@ -275,3 +275,18 @@ body {
   height:50px; 
   margin-top: -7px;
 }
+
+
+
+.modal-content {
+  color:white;
+  background-color:black;
+}
+
+.modal-body {
+  text-align:center;
+}
+
+.modal-body img {
+  display:inline-block;
+}

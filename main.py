@@ -148,6 +148,7 @@ def get_msg_over_time():
     x, sent, recieved = calc_msg_volume(session['fb_auth_token'], session['id'])
     return jsonify({'x':x, 'sent':sent, 'recieved':recieved})
 
+
 """
 Get recomendations
 """
@@ -160,18 +161,39 @@ def get_explore_info():
     ppl_list = get_next_recommendation(session['fb_auth_token'])
     return jsonify({'ppl_list':ppl_list, 'signed_in':signed_in})
 
+
 """
 Like
 """
 @app.route('/like', methods=["POST"])
 def like():
-    
     _id = request.form['_id']
     result = like_by_id(_id)
-    print result
-
+    self_main_pic = session['me']['img'][0]
+    print result.update({'self_main_pic': self_main_pic})
     return jsonify(result)
 
+
+"""
+Pass
+"""
+@app.route('/_pass', methods=["POST"])
+def _pass():
+    _id = request.form['_id']
+    result = pass_by_id(_id)
+    return jsonify(result)
+
+
+"""
+Superike
+"""
+@app.route('/superlike', methods=["POST"])
+def superlike():
+    _id = request.form['_id']
+    result = superlike_by_id(_id)
+    self_main_pic = session['me']['img'][0]
+    print result.update({'self_main_pic': self_main_pic})
+    return jsonify(result)
 
 
 
