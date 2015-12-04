@@ -69,6 +69,12 @@ width: 100%;
 	height:400px
 }
 
+.top_span_loading {
+  display: inline-block; 
+  vertical-align: middle; 
+  height:200px
+}
+
 .bottom_span {
 	 
 	display: inline-block; 
@@ -256,3 +262,16 @@ body {
 }
 
 
+.nav_bar_img {
+  opacity: 0.7; 
+}
+
+.nav_bar_img:hover {
+  opacity: 1; 
+}
+
+.action_btn {
+  width:50px;
+  height:50px; 
+  margin-top: -7px;
+}
