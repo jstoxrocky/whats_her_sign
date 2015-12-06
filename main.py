@@ -1,12 +1,12 @@
 from flask import Flask, request, session, render_template, jsonify, redirect, url_for
 import requests
 import os
-from pandas import DataFrame
+# from pandas import DataFrame
 
 
 # Custom
 from business_logic import *
-df = DataFrame
+# df = DataFrame
 
 # Constants
 APP_SECRET = os.environ.get('tinder_app_secret')
@@ -237,8 +237,8 @@ def sort_the_data():
 
     #age, last time messaged, match date, distance
 
-    # df = get_data_to_chop_n_screw(session['fb_auth_token'])
-    global df
+    df = get_data_to_chop_n_screw(session['fb_auth_token'])
+    # global df
 
     data = DataFrame(df)
     age = request.form['age']
