@@ -1,0 +1,63 @@
+<script>
+	$(document).ready(function(){
+		load_chop_n_screw_data()
+		// Something that just LOADS the dataframe
+		// 
+	});
+</script>
+
+<section>
+
+		<div class="container" style="width:100%">
+			<div class="well">
+			<form class="form-horizontal">
+
+		        <div class="form-group">
+		            <label class="control-label col-xs-2" for="age_input">Age</label>
+		            <div class="col-xs-10">
+		                <input id="age_input" type="text" class="form-control" required placeholder="21">
+		            </div>
+		        </div>
+
+<!-- 		       	<div class="form-group">
+		            <label class="control-label col-xs-2" for="distance_input">Distance</label>
+		            <div class="col-xs-10">
+		                <input id="distance_input" type="text" class="form-control" required placeholder="Miles">
+		            </div>
+		        </div> -->
+
+		        <div class="form-group">
+		            <label class="control-label col-xs-2" for="zodiac_input">Zodiac</label>
+		            <div class="col-xs-10 checkbox">
+		                <input id="zodiac_input" type="checkbox">
+		            </div>
+		        </div>
+
+				<div class="form-group">
+		            <label class="control-label col-xs-2" for="msg_input">Have Messaged</label>
+		            <div class="col-xs-10 checkbox">
+		                <input id="msg_input" type="checkbox">
+		            </div>
+		        </div>
+
+
+
+		        <div class="form-group">
+		        	<label class="control-label col-xs-2" for="submit_chop"></label>
+		            <div class="col-xs-10">
+		        		<button onClick="javascript:chop_n_screw();" class="btn btn-primary" id="submit_chop" type="button">Submit</button>
+		        	</div>
+		        </div>
+
+		    </div>
+			</form>
+		</div>
+	
+	<div id="chop_n_screw_section" class="container" style="width:100%"></div>
+
+
+
+
+</section>
+
+

@@ -1,11 +1,12 @@
 from flask import Flask, request, session, render_template, jsonify, redirect, url_for
 import requests
 import os
-
+from pandas import DataFrame
 
 
 # Custom
 from business_logic import *
+df = DataFrame
 
 # Constants
 APP_SECRET = os.environ.get('tinder_app_secret')
@@ -101,6 +102,20 @@ def explore():
     return render_template('/explore.html', data=data)
 
 
+"""
+Redirect to explore page
+"""
+@app.route('/chop_n_screw')
+def chop_n_screw():
+
+    if session.get('name'):
+        data = {'fb_auth_token': session['fb_auth_token'],
+            'name':session['name'],
+            'signed_in': True}
+    else:
+        data = {'signed_in': False,}
+
+    return render_template('/chop_n_screw.html', data=data)
 
 #---------------------------------------
 
@@ -195,6 +210,130 @@ def superlike():
     print result.update({'self_main_pic': self_main_pic})
     return jsonify(result)
 
+
+
+
+
+
+
+
+
+
+"""
+Load Chop n Screw Data SOMETHIGN WEIRD HAPPENING WITH SESSION. NOT SAVING DATA. TOO BIG FOR COOKIE?
+"""
+@app.route('/load_chop_n_screw_data')
+def load_chop_n_screw_data():
+    global df
+    df = get_data_to_chop_n_screw(session['fb_auth_token'])
+    return jsonify({'msg':'df loaded'})
+
+
+"""
+Sort the Data
+"""
+@app.route('/sort_the_data', methods=["POST"])
+def sort_the_data():
+
+    #age, last time messaged, match date, distance
+
+    # df = get_data_to_chop_n_screw(session['fb_auth_token'])
+    global df
+
+    data = DataFrame(df)
+    age = request.form['age']
+    # distance_mi = request.form['distance_mi']
+    msg = request.form['msg']
+    _zodiac = request.form['zodiac']
+
+
+    df_array = [data]
+    label_array = [[]]
+    # if distance_mi:
+    #     df_array, label_array = distance_gele(df_array, label_array, distance_mi)
+    if age:
+        df_array, label_array = age_gele(df_array, label_array, age)
+    if int(msg) == 1:
+        df_array, label_array = msg_yes_no(df_array, label_array)
+    if int(_zodiac) == 1:
+        df_array, label_array = sort_by_zodiac(df_array, label_array)
+
+    groups = [df['dp'].tolist() for df in df_array]
+    _ids = [df['_id'].tolist() for df in df_array]
+
+    return jsonify({'groups':groups, 'labels':label_array, '_ids':_ids})
+
+
+
+def msg_yes_no(df_array, label_array):
+    new_df_array = []
+    new_lbl_array = []
+    for df, lbl in zip(df_array, label_array):
+
+        a_arr = [l for l in lbl]
+        a_arr.append("Never Messaged")
+        b_arr = [l for l in lbl]
+        b_arr.append("At least one message")
+        new_lbl_array.append(a_arr)
+        new_lbl_array.append(b_arr)
+
+        new_df_array.append(df[df['any_msg']==0])
+        new_df_array.append(df[df['any_msg']==1])
+    return new_df_array, new_lbl_array
+
+def age_gele(df_array, label_array, age):
+
+    new_df_array = []
+    new_lbl_array = []
+    for df, lbl in zip(df_array, label_array):
+        age = int(age)
+
+        a_arr = [l for l in lbl]
+        a_arr.append("At least %i years old" %age)
+        b_arr = [l for l in lbl]
+        b_arr.append("Under %i years old" %age)
+        new_lbl_array.append(a_arr)
+        new_lbl_array.append(b_arr)
+
+        new_df_array.append(df[df['age']>=age])
+        new_df_array.append(df[df['age']<age])
+    return new_df_array, new_lbl_array
+
+
+def distance_gele(df_array, label_array, distance_mi):
+
+    new_df_array = []
+    new_lbl_array = []
+    for df, lbl in zip(df_array, label_array):
+        distance_mi = int(distance_mi)
+
+        a_arr = [l for l in lbl]
+        a_arr.append("Above %i miles" %distance_mi)
+        b_arr = [l for l in lbl]
+        b_arr.append("Within %i miles" %distance_mi)
+        new_lbl_array.append(a_arr)
+        new_lbl_array.append(b_arr)
+
+        new_df_array.append(df[df['distance_mi']>distance_mi])
+        new_df_array.append(df[df['distance_mi']<=distance_mi])
+    return new_df_array, new_lbl_array
+
+
+
+
+def sort_by_zodiac(df_array, label_array):
+
+    new_df_array = []
+    new_lbl_array = []
+    for df, lbl in zip(df_array, label_array):
+
+        for sign in zodiacs:
+            a_arr = [l for l in lbl]
+            a_arr.append(sign[1])
+            new_lbl_array.append(a_arr)
+            new_df_array.append(df[df['sign']==sign[1]])
+
+    return new_df_array, new_lbl_array
 
 
 

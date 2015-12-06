@@ -11,6 +11,7 @@ function display_ppl(ppl_list, loc_id, is_new, is_exploring) {
             img_list = ppl_list[person_num]['img']
             large_img_list = ppl_list[person_num]['large_img_list']
             last_active_at = ppl_list[person_num]['last_active_at']
+            // distance_mi = ppl_list[person_num]['distance_mi']
 
             outside_div = $("#" + loc_id).append('<div id="'+person_num+'" class="well"></div>')
 
@@ -19,6 +20,7 @@ function display_ppl(ppl_list, loc_id, is_new, is_exploring) {
             $("#"+person_num).append('<p>Last active: '+last_active_at+'</p>')
             $("#"+person_num).append('<p>'+bio+'</p>')
             $("#"+person_num).append('<p>DOB: '+birthday+'</p>')
+            // $("#"+person_num).append('<p>'+distance_mi+' miles away</p>')
             $("#"+person_num).append('<p id="curr_id" style="font-size:1em;">'+_id+'</p>')
 
 
@@ -303,3 +305,107 @@ function explore_info() {
 };
 
 
+
+function load_chop_n_screw_data() {
+
+    $('#squares').hide();
+    $('#squares_load').show();
+
+    url = "/load_chop_n_screw_data";
+    $.get(url).done(function(response) {
+        $('#squares_load').hide();
+        $('#squares').show();
+
+        msg = response['msg'];
+        console.log(msg)
+
+    // If POST request fails
+    }).fail(function(error) {
+        console.log("FAILURE");
+    });
+
+};
+
+
+
+function chop_n_screw() {
+
+    $('#squares').hide();
+    $('#squares_load').show();
+
+    $('#chop_n_screw_section').empty()
+
+    age = $('#age_input').val()
+    distance_mi = $('#distance_input').val()
+    
+    if ($('#msg_input').is(':checked')){msg=1} else {msg=0};
+    if ($('#zodiac_input').is(':checked')){zodiac=1} else {zodiac=0};
+
+
+    url = "/sort_the_data";
+    $.post(url,{age:age,msg:msg,zodiac:zodiac,distance_mi:distance_mi}).done(function(response) {
+        $('#squares_load').hide();
+        $('#squares').show();
+
+        // console.log(response)
+        imgs = response['groups'];
+        labels = response['labels'];
+        _ids = response['_ids']
+        display_grid(imgs, labels, _ids)
+
+
+    // If POST request fails
+    }).fail(function(error) {
+        console.log("FAILURE");
+    });
+
+};
+
+
+
+function display_grid(imgs, labels, _ids) {
+
+    for (var j=0; j<imgs.length;j++) {
+
+        curr_h1 = ''
+        for (var l=0; l<labels[j].length;l++) {
+            curr_h1 = curr_h1 + '<p>'+labels[j][l]+'</p>'
+        }
+
+        curr_div = $('<div class="well"></div>').appendTo("#chop_n_screw_section")
+        curr_img = imgs[j]
+        curr_ids = _ids[j]
+
+        for (var i =0; i < curr_img.length; i++) {
+            img = '<button class="binder_img" style="background-color:#f5f5f5;border:0px;padding:2px;" value="'+curr_ids[i]+'"><img class="tinder_img" style="width:50px;height:50px;padding:0px;" src="'+curr_img[i]+'"/></button>'
+            curr_div.prepend(img)
+        }
+        curr_div.prepend(curr_h1)
+    }
+
+    $(function() {
+        $('.binder_img').click(function(e) {
+
+            _id = $(this).val()
+            alert(_id)
+
+            // url = "/get_info";
+            // $.post(url,{_id:_id}).done(function(response) {
+
+            //     console.log('good post')
+
+            //     ppl_list = response['ppl_list'];
+            //     is_new = response['new'];
+            //     is_exploring = false
+            //     display_ppl(ppl_list, loc_id, is_new, is_exploring)
+
+            // // If POST request fails
+            // }).fail(function(error) {
+            //     console.log(error);
+            // });
+        });
+    });
+
+
+
+}

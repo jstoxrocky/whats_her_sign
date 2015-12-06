@@ -1,5 +1,6 @@
 import requests
 import json
+import time
 
 TINDER_TO_FB_CLIENT_ID = 464891386855067
 HEADERS = {
@@ -53,6 +54,12 @@ def search_by_user_id(auth_token, _id):
     if r.status_code == 401 or r.status_code == 504:
         raise Exception('Invalid token. Try getting a fresh one.')
         print r.content
+
+    if r.status_code == 429:        
+        time.sleep(10)
+        r = requests.get('https://api.gotinder.com/user/%s' %(_id), headers=h)
+        print r.status_code
+
 
     return r.json()['results']
 
