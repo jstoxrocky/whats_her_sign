@@ -290,3 +290,51 @@ body {
 .modal-body img {
   display:inline-block;
 }
+
+
+.steps {
+  width:90%;
+}
+
+
+.q {
+  font-size:20px;
+}
+
+
+.fade {
+  position: absolute;
+  background-color:white;
+  opacity: 0.3; 
+}
+
+#f1 {
+  width:953;
+  height:345;
+}
+#f2 {
+  width:960;
+  height:135;
+}
+#f3 {
+  width:662;
+  height:347;
+}
+#f4 {
+  width:662;
+  height:347;
+}
+#f5 {
+  width:664;
+  height:115;
+}
+#f6 {
+  width:664;
+  height:230;
+}
+#f7 {
+  width:1070;
+  height:227;
+}
+
+

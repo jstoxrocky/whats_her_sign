@@ -1,41 +1,100 @@
 <section id="section_submit">
-    <div class="container" style="width:75%;padding-top:50px;padding-bottom:50px;">
-        <h1>Log in to Tinder</h1>
+    <div class="container" style="width:100%;padding-top:50px;padding-bottom:50px;">
+        <h1>Logging into Tinder</h1>
     </div>
+
+
+
+
+<!-- <button style="vertical-align:middle;" id="search_btn" class="btn btn-primary" type="submit" onClick="javascript:get_info();"></button> -->
+
+
+<!--     <div class="well">
+        <h1>Logging In</h1>
+    </div> -->
+        <div class="well steps ">
+            <p class="q">Step 1</p>
+            <p class="a">Right click on the link below and select 'Copy Link Address'.<p>
+                <a target="_blank" href="https://www.facebook.com/dialog/oauth?client_id=464891386855067&redirect_uri=https://www.facebook.com/connect/login_success.html&scope=basic_info,email,public_profile,user_about_me,user_activities,user_birthday,user_education_history,user_friends,user_interests,user_likes,user_location,user_photos,user_relationship_details&response_type=token">Link</a>
+            <hr>
+            <div class="fade" id="f1"></div>
+            <img class="login_gif" src="../static/images/gif1.gif"/>
+        </div>
+
+        <div class="well">
+            <p class="q">Step 2</p>
+            <p class="a">Open a new tab in your browser.<p>
+            <hr>
+            <div class="fade" id="f2"></div>
+            <img class="login_gif" src="../static/images/gif2.gif"/>
+        </div>
+
+        <div class="well">
+            <p class="q">Step 3</p>
+            <p class="a">Open up the Developers Console in this new tab. (Option+Cmd+J on a Mac with Google Chrome).<p>
+            <hr>
+            <div class="fade" id="f3"></div>
+            <img class="login_gif" src="../static/images/gif3.gif"/>
+        </div>
+
+        <div class="well">
+            <p class="q">Step 4</p>
+            <p class="a">Click the 'Network' tab in the Developers Console.<p>
+            <hr>
+            <div class="fade" id="f4"></div>
+            <img class="login_gif" src="../static/images/gif4.gif"/>
+        </div>
+
+        <div class="well">
+            <p class="q">Step 5</p>
+            <p class="a">Paste the URL you copied in Step 1 into the address bar and hit Enter.<p>
+            <hr>
+            <div class="fade" id="f5"></div>
+            <img class="login_gif" src="../static/images/gif5.gif"/>
+        </div>
+
+        <div class="well">
+            <p class="q">Step 6</p>
+            <p class="a">Under the 'Name' column, click the row beginning with 'oauth?client_id...'<p>
+            <hr>
+            <div class="fade" id="f6"></div>
+            <img class="login_gif" src="../static/images/gif6.gif"/>
+        </div>
+        <div class="well">
+            <p class="q">Step 7</p>
+            <p class="a">Under 'Response Headers', look for 'location'. Copy and paste the Access Token, beginning from 'access_token=' up to but not including '&expires_in=...'<p>
+            <hr>
+            <div class="fade" id="f7"></div>
+            <img class="login_gif" src="../static/images/gif7.gif"/>
+        </div>
+
+        <div class="well">
+            <p class="q">Step 8</p>
+            <p class="a">Paste this access token into the field below and Login.<p>
+        </div>
+
+
+
+
     <div class="container" style="width:75%;">
+    <form id="login_form" method="post" action="/login" class="form-horizontal">
+        <label class="control-label col-xs-2" for="fb_auth_add">Access Token</label>
 
-        
-
-        <!-- <button class="btn btn-primary" id="submit_hw" type="button">Submit</button> -->
-
-<form id="login_form" method="post" action="/login" class="form-horizontal">
-
-<!--         <div id="fb_id_input" class="form-group">
-            <label class="control-label col-xs-2" for="fb_id_add">Facebook User ID</label>
-            <div class="col-xs-10">
-                <input name="fb_id" type="text" class="form-control" required placeholder="464891386955067">
-                <a target="_blank" href="http://findmyfbid.com/">Find it here</a>
-            </div>
-        </div> -->
-
-        <div id="fb_auth_input" class="form-group">
-            <label class="control-label col-xs-2" for="fb_auth_add">Facebook Auth Token</label>
-            <div class="col-xs-10">
-                <input name="fb_auth_token" type="text" class="form-control" required placeholder="CAAGm0PX4ZCpsBAHhIAmpMfwXCYNwwrGI">
-                <a target="_blank" href="https://www.facebook.com/dialog/oauth?client_id=464891386855067&redirect_uri=https://www.facebook.com/connect/login_success.html&scope=basic_info,email,public_profile,user_about_me,user_activities,user_birthday,user_education_history,user_friends,user_interests,user_likes,user_location,user_photos,user_relationship_details&response_type=token">Find it here</a>
-            </div>
-        </div>
-
-        <div id="file_input" class="form-group">
-            <label class="control-label col-xs-2"></label>
-            <div class="col-xs-10">
-                <input type="submit" name="submit" value="Submit" class="btn btn-primary"/>
-                
-            </div>
-        </div>
-</form>
-
-
+        <input name="fb_auth_token" style="width:500px;height:35px;vertical-align:middle;" type="text" placeholder=" CAAGm0PX4ZCpsBAHh..."><!--
+        --><input type="submit" name="submit" style="vertical-align:middle;" class="btn btn-primary" type="submit" />
+    </form>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 </section>
