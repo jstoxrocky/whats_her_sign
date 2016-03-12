@@ -52,11 +52,13 @@ width: 100%;
 
 #main_image {
 
- 	background-image:url('https://images.unsplash.com/photo-1444573997188-93a7ea73940f?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&w=1080&fit=max&s=45c03a7a00c1eacfcbbf1602a9e8ba86&w=1300');
-
+ 	background-image:url('https://images.unsplash.com/photo-1445905595283-21f8ae8a33d2?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&fit=max&s=45c03a7a00c1eacfcbbf1602a9e8ba86');
+                        /*https://images.unsplash.com/photo-1445905595283-21f8ae8a33d2?crop=entropy&fit=crop&fm=jpg&h=650&ixjsv=2.1.0&ixlib=rb-0.3.5&q=80&w=1300*/
  	background-repeat: no-repeat;
     position:relative;
     padding-bottom:35px;
+    width:100%;
+    height:500px;
  }
 /*
  #get_hw_image {
